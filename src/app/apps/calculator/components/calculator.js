@@ -1,6 +1,6 @@
 
 import { useEffect, useRef } from "react";
-import { getCalculatorState, setCalculatorState } from "@/app/globals";
+import { getCustomState, setCustomState } from "@/app/globals";
 
 const colors = {
     "BLUE": "#2d70b3",
@@ -14,34 +14,34 @@ const colors = {
     "SANJAY_BLACK": "#111111"
 };
 
-export default function Calculator({ type="graphing" }) {
+export default function Calculator({ type="graphing", uuid="" }) {
     const calculatorElem = useRef(null);
 
     useEffect(() => {
         const calculator = type == "graphing" ? Desmos.GraphingCalculator(calculatorElem.current, { colors })
             : (type == "scientific" ? Desmos.ScientificCalculator(calculatorElem.current) : Desmos.FourFunctionCalculator(calculatorElem.current));
-        const state = getCalculatorState();
-        if (state && type == "graphing") calculator.setState(state, { remapColors: true });
+        const state = getCustomState("sos_calculator_" + uuid);
+        if (state) calculator.setState(state, { remapColors: true });
 
         // Locally save state of Desmos calculator
         const onUnload = () => {
             if (!calculator.getState()) return;
-            if (type == "graphing") setCalculatorState(calculator.getState());
+            setCustomState("sos_calculator_" + uuid, calculator.getState());
         };
         window.addEventListener("beforeunload", onUnload);
 
         // Set calculator type on body element
-        calculatorElem.current.parentElement.classList.add(`calculator-${type}`);
+        calculatorElem.current.parentElement.classList.add(`calculator-${uuid}`);
 
         return () => {
             onUnload();
 
-            calculator.destroy();
-            calculatorElem.current.innerHTML = "";
+            calculator?.destroy();
+            (calculatorElem.current ?? {}).innerHTML = "";
             window.removeEventListener("beforeunload", onUnload);
-            calculatorElem.current.parentElement.classList.remove(`calculator-${type}`);
+            calculatorElem.current?.parentElement.classList.remove(`calculator-${uuid}`);
         };
-    }, [type]);
+    });
 
     return (
         <div ref={calculatorElem} className="w-full h-full"></div>

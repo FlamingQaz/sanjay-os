@@ -84,11 +84,11 @@ export function togglePinApp(name) {
     else return pinApp(name);
 }
 
-export function getCalculatorState() {
-    if (!localStorage.getItem("sos_calculator")) return null;
-    return JSON.parse(localStorage.getItem("sos_calculator"));
+export function getCustomState(state) {
+    if (!localStorage.getItem(state)) return null;
+    return JSON.parse(localStorage.getItem(state));
 }
 
-export function setCalculatorState(state) {
-    localStorage.setItem("sos_calculator", JSON.stringify(state));
+export function setCustomState(state, value) {
+    localStorage.setItem(state, JSON.stringify(value));
 }

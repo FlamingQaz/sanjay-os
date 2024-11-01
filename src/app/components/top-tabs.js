@@ -1,15 +1,34 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { getCustomState, setCustomState } from "../globals";
 
-export default function TopTabs({ content={}, onTabSwitch=(name)=>{} }) {
-    const [tab, setTab] = useState(Object.keys(content)[0]);
+export default function TopTabs({ content={}, uuid }) {
+    const [tab, setTab] = useState(null);
 
     function onSelectTab(tabName) {
         if (tabName != tab) {
+            setCustomState("sos_tab_" + uuid, { tab: tabName });
             setTab(tabName);
-            onTabSwitch(tabName);
         }
     }
+
+    useEffect(() => {
+        const state = getCustomState("sos_tab_" + uuid);
+        if (state && Object.keys(content).includes(state.tab)) setTab(state.tab);
+        else setTab(Object.keys(content)[0]);
+
+        // Locally save state of tabs
+        const onUnload = () => {
+            setCustomState("sos_tab_" + uuid, { tab });
+        };
+        window.addEventListener("beforeunload", onUnload);
+
+        return () => {
+            window.removeEventListener("beforeunload", onUnload);
+        };
+    });
+
+    if (tab == null) return null;
 
     return (
         <div className="h-full w-full flex flex-col">

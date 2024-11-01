@@ -1,0 +1,45 @@
+/*
+    Desmos Dark Theme by Sanjay Bhuvaneswaran
+*/
+
+:root {
+    --dcg-custom-background-color-shaded: linear-gradient(to right, #F09819 0%, #FF512F 100%);
+    --dcg-custom-background-color-light: rgba(240, 152, 25, 0.3);
+    --dcg-custom-text-color: #222;
+}
+
+.calculator-graphing {
+    --dcg-custom-background-color: #fff;
+}
+
+.calculator-scientific {
+    --dcg-custom-background-color: linear-gradient(to top, #fff 30%, #59a063 100%);
+}
+
+.calculator-four-function {
+    --dcg-custom-background-color: linear-gradient(to top, #fff 30%, #5969a0 100%);
+}
+
+i:not(.dcg-icon-remove):not(.dcg-icon-show):not(.dcg-layered-icon):not(.dcg-icon-arrow-two-way) {
+    color: #eee;
+}
+
+.dcg-icon-show {
+    color: #FF512F;
+}
+
+.dcg-icon-btn i, .dcg-btn-flat-gray i, .dcg-overgraph-icon i {
+    opacity: 0.9 !important;
+}
+
+.dcg-btn-flat-gray i:hover {
+    opacity: 1 !important;
+}
+
+.dcg-tab {
+    background: var(--dcg-custom-background-color-light) !important;
+}
+
+.dcg-container.dcg-default-border {
+    border: none !important;
+}

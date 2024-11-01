@@ -1,0 +1,7 @@
+{
+    "name": "SanjayOS",
+    "short_name": "SanjayOS",
+    "description": "A mock OS with various websites serving as apps.",
+    "start_url": "/",
+    "display": "standalone"
+}

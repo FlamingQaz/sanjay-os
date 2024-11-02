@@ -1,7 +1,11 @@
 "use client"
 
+import Camera from "./components/camera";
+
 export default function CameraPage() {
     return (
-        <p>Hello world from camera page</p>
+        <div>
+            <Camera />
+        </div>
     );
 }

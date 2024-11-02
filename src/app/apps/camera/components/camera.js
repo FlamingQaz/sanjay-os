@@ -29,8 +29,6 @@ export default function Camera({ isRear=false }) {
 
         // Get image from video stream
         video.current.onclick = () => {
-            alert("CAPTURING");
-
             // Create virtual canvas element
             const canvas = document.createElement("canvas");
             const ctx = canvas.getContext("2d");

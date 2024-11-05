@@ -7,7 +7,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className="w-full h-full">
+    <html lang="en" className="w-full h-screen overflow-y-auto">
       <body
         className={`antialiased w-full h-full`}
       >

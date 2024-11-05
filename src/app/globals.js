@@ -1,6 +1,7 @@
 export const defaultApps = {
     "camera": "/apps/camera",
     "photos": "/apps/photos",
+    "messages": "/apps/messages",
     "clock": "/apps/clock",
     "calculator": "/apps/calculator",
     "docs": "/apps/docs",

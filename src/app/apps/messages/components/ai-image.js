@@ -1,3 +1,4 @@
+"use client"
 
 import { useState, useRef, useEffect } from "react";
 import AtomicSpinner from "atomic-spinner";
@@ -5,12 +6,16 @@ import AtomicSpinner from "atomic-spinner";
 const MAX_SEED = 100;
 const styles = ["Photo","Anime","Hyper-Realistic","Abstract","Surrealist","Black and White","Fantasy","Comic"];
 
+function createSource(aiPrompt, style, seed) {
+    const stylePrompt = ` in a ${style} style`;
+    return `https://image.pollinations.ai/prompt/${encodeURIComponent(aiPrompt + stylePrompt)}?seed=${seed}&nologo=true&private=true&width=2000&height=2000`;
+}
+
 export default function AiImage({ width, height, alt: aiPrompt }) {
     const [seed, setSeed] = useState(0);
     const [style, setStyle] = useState(0);
 
-    const stylePrompt = ` in a ${styles[style]} style`;
-    const source = `https://image.pollinations.ai/prompt/${encodeURIComponent(aiPrompt + stylePrompt)}?seed=${seed}&nologo=true&private=true`;
+    const source = createSource(aiPrompt, styles[style], seed);
 
     const image = useRef(null);
     const loader = useRef(null);
@@ -28,11 +33,11 @@ export default function AiImage({ width, height, alt: aiPrompt }) {
 
     function saveImage() {
         const canvas = document.createElement("canvas");
-        canvas.width = image.current.width;
-        canvas.height = image.current.height;
+        canvas.width = 2000;
+        canvas.height = 2000;
 
         const ctx = canvas.getContext("2d");
-        ctx.drawImage(image.current, 0, 0, canvas.width, canvas.height);
+        ctx.drawImage(image.current, 0, 0, 2000, 2000);
         
         const url = canvas.toDataURL("image/png");
         const link = document.createElement("a");
@@ -59,7 +64,7 @@ export default function AiImage({ width, height, alt: aiPrompt }) {
                 <span className="font-bold">Seed:&nbsp;</span>
                 <span>{seed}</span>
             </div>
-            <div className="absolute top-0 left-0 w-full h-full flex flex-col gap-2 items-center justify-center bg-black/30 backdrop-blur-md" ref={loader}>
+            <div className="absolute top-0 left-0 w-full h-full flex flex-col gap-2 items-center justify-center bg-black/30 backdrop-blur-md rounded-3xl" ref={loader}>
                 <AtomicSpinner
                     atomSize={200}
                     displayElectronPaths={false}

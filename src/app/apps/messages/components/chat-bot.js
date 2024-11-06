@@ -1,7 +1,8 @@
+"use client"
 
 import MessagesPane from "./pane";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 const systemChat = "You are a helpful assistant that gives accurate, concise answers. You are capable of generating both text and images in your responses.";
 const systemImage = "You are a prompt analyst tasked with determining whether a user's prompt wants to generate plain text or images. If the user wants to generate an image, respond with 'image'. Otherwise, respond with 'text'. Always respond with only one word, either 'image' or 'text'.";
 
@@ -24,16 +25,17 @@ function image(prompt) {
     return `$SanjayOS_Prompt$![${prompt}](https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?seed=0&nologo=true&private=true)`;
 }
 
-export default function MessagesChatBot({ color, user, system=systemChat }) {
+export default function MessagesChatBot({ user, pfp, system=systemChat }) {
     const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [mounted, setMounted] = useState(false);
 
-    async function sendChat(message) {
+    async function sendChat(message, ignoreYourChat=false) {
         // Add your chat message
-        const newMessages = [
-            ...messages,
+        let newMessages = [...messages];
+        if (!ignoreYourChat) newMessages.push(
             { username: "You", message, timestamp: new Date() }
-        ];
+        );
         setMessages(newMessages);
 
         // Reveal loading indicator
@@ -67,7 +69,14 @@ export default function MessagesChatBot({ color, user, system=systemChat }) {
         }]));
     }
 
+    useEffect(() => {
+        if (!mounted) {
+            setMounted(true);
+            sendChat("Introduce yourself!", true);
+        }
+    });
+
     return (
-        <MessagesPane messages={messages} color={color} user={user} onChat={sendChat} loading={loading} />
+        <MessagesPane messages={messages} user={user} pfp={pfp} onChat={sendChat} loading={loading} />
     );
 }

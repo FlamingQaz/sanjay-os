@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import AiImage from "./ai-image";
 
 import AtomicSpinner from "atomic-spinner";
+import Image from "next/image";
 
 import Markdown from "react-markdown";
 const customComponents = {
@@ -26,8 +27,8 @@ const customComponents = {
 
             return (
                 <AiImage
-                    width={1024}
-                    height={1024}
+                    width={2000}
+                    height={2000}
                     alt={alt}
                 />
             )
@@ -36,7 +37,7 @@ const customComponents = {
     }
 }
 
-export default function MessagesOther({ username, message = "", loading=false }) {
+export default function MessagesOther({ username, message = "", loading=false, offline=false }) {
     useEffect(() => {
         Prism.highlightAll();
     });
@@ -54,7 +55,12 @@ export default function MessagesOther({ username, message = "", loading=false })
                             electronPathCount={10}
                             nucleusParticleFillColor="#eee"
                             electronColorPalette={["var(--sos-self-msg)"]}
-                        /> : <Markdown components={customComponents}>{message}</Markdown>}
+                        /> : (!offline ? <Markdown components={customComponents}>{message}</Markdown> : "")}
+                    {offline ?
+                        <div className="flex flex-col justify-center items-center gap-2">
+                            <Image src="/no-internet.png" alt="No Internet" loading="lazy" width={64} height={64} className="invert" />
+                            <span className="text-xs">Sorry, you're not connected to the internet :(</span>
+                        </div> : ""}
                 </div>
             </div>
             <div className="w-0 sm:w-40"></div>

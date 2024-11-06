@@ -23,9 +23,16 @@ const isExpiredTime = (timestamp=new Date(), prevTimestamp=new Date()) => {
 
     return false;
 };
+const defaultColors = {
+    "asi": "#620bbf",
+    "dev": "#16a34a",
+    "illa": "#d90000",
+    "misc": "#16a34a"
+};
 
-export default function MessagesPane({ messages, user, onChat=(chat)=>{}, loading=false }) {
-    const [color, setColor] = useState("#16a34a");
+export default function MessagesPane({ messages, user, pfp, onChat=(chat)=>{}, loading=false }) {
+    const [color, setColor] = useState(defaultColors[pfp] ?? defaultColors.misc);
+    const [offline, setOffline] = useState(false);
     const output = [];
     let lastTimestamp = null;
 
@@ -48,6 +55,25 @@ export default function MessagesPane({ messages, user, onChat=(chat)=>{}, loadin
 
     // Disable certain keyboard shortcuts in chatbox
     async function disableShortcuts(event) {
+        if (event.key.toUpperCase() == "ARROWUP") {
+            event.preventDefault();
+
+            const lastMessage = messages.filter(e => e.username == "You").at(-1);
+            if (lastMessage) {
+                chatInput.current.innerText = lastMessage.message;
+
+                // Move caret to end
+                const range = document.createRange();
+                range.selectNodeContents(chatInput.current);
+                range.collapse(false);
+                const sel = window.getSelection();
+                sel.removeAllRanges();
+                sel.addRange(range);
+            }
+
+            return;
+        }
+
         if (event.key.toUpperCase() == "ENTER" && !event.shiftKey) {
             event.preventDefault();
             onSubmitChat();
@@ -84,13 +110,15 @@ export default function MessagesPane({ messages, user, onChat=(chat)=>{}, loadin
 
     // Callback on submitting chat
     function onSubmitChat() {
+        if (!chatInput.current.innerText?.trim()?.length) return;
+
         onChat(chatInput.current.innerText);
         chatInput.current.innerHTML = "";
     }
 
     // Changing color
     function setNewColor() {
-        setCustomState("sos_messages_color", { color: colorInput.current.value });
+        setCustomState("sos_messages_color_" + user, { color: colorInput.current.value });
         setColor(colorInput.current.value);
     }
 
@@ -103,17 +131,39 @@ export default function MessagesPane({ messages, user, onChat=(chat)=>{}, loadin
         });
 
         // Import saved custom color
-        const localColor = getCustomState("sos_messages_color")?.color ?? "#16a34a";
+        const localColor = getCustomState("sos_messages_color_" + user)?.color ?? defaultColors[pfp] ?? defaultColors.misc;
         setColor(localColor);
 
         // Locally save custom color
         const onUnload = () => {
-            setCustomState("sos_messages_color", { color });
+            setCustomState("sos_messages_color_" + user, { color });
         };
         window.addEventListener("beforeunload", onUnload);
 
+        // Determine internet connection status
+        async function isOnline() {
+            let status;
+
+            try {
+                await fetch("https://google.com", { mode: "no-cors", signal: AbortSignal.timeout(2800) });
+
+                // If any response, we are most likely connected
+                status = true;
+            }
+            catch (_err) {
+                // If any error, we are most likely not connected
+                status = false;
+            }
+
+            if (status == offline)
+                setOffline(!status);
+        }
+        isOnline();
+        const onlineChecker = setInterval(isOnline, 3000);
+
         return () => {
             window.removeEventListener("beforeunload", onUnload);
+            clearInterval(onlineChecker);
         };
     });
 
@@ -125,8 +175,8 @@ export default function MessagesPane({ messages, user, onChat=(chat)=>{}, loadin
                 </a>
                 <div className="grow"></div>
                 <div className="flex flex-col">
-                    <Image width={64} height={64} src="/bg.jpg" className="w-16 h-16 p-2" alt="Main avatar" loading="lazy" />
-                    <p className="w-full items-center justify-center text-xs">{user}</p>
+                    <Image width={64} height={64} src={`/user-pfps/${pfp}.jpg`} className="w-16 h-16 p-2 rounded-full" alt="Main avatar" loading="lazy" />
+                    <p className="w-full text-center text-xs">{user}</p>
                 </div>
                 <div className="grow"></div>
                 <div className="p-3 invisible">&#x2B9C;</div>
@@ -137,11 +187,14 @@ export default function MessagesPane({ messages, user, onChat=(chat)=>{}, loadin
             </div>
             <div className="w-full h-full py-3 px-2 sm:px-6 flex flex-col grow overflow-y-visible">
                 {output}
-                {loading ? <MessagesOther loading={true} username={user} /> : ""}
+                {
+                    offline ? <MessagesOther offline={true} username={user} />
+                    : (loading ? <MessagesOther loading={true} username={user} /> : "")
+                }
             </div>
             <div className="w-full p-3 bg-gray-950/20 backdrop-blur-md sticky bottom-0 self-start flex flex-row items-center justify-center z-10">
                 <div className="bg-gray-950 flex flex-row border-gray-800 border-2 rounded-3xl relative max-w-sm lg:max-w-md xl:max-w-lg w-full min-h-9">
-                    <div contentEditable={!loading} suppressContentEditableWarning="true" className="bg-gray-950 rounded-3xl pl-2 pr-8 w-full flex flex-col justify-center flex-grow outline-none peer empty:after:content-['Message'] empty:after:pointer-events-none empty:after:text-gray-500 empty:[line-height:1.85rem]" ref={chatInput} onKeyDown={disableShortcuts}></div>
+                    <div contentEditable={!loading && !offline} suppressContentEditableWarning="true" className="bg-gray-950 rounded-3xl pl-2 pr-8 w-full flex flex-col justify-center flex-grow outline-none peer empty:after:content-['Message'] empty:after:pointer-events-none empty:after:text-gray-500 empty:[line-height:1.85rem]" ref={chatInput} onKeyDown={disableShortcuts}></div>
                     <button className="p-1 bg-[--sos-self-msg] absolute right-1 top-1/2 -translate-y-1/2 rounded-full text-lg font-bold h-6 w-6 flex items-center justify-center [line-height:0] peer-empty:opacity-0 peer-empty:pointer-events-none transition-opacity duration-200" onClick={onSubmitChat}>
                         &#x1F869;
                     </button>

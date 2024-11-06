@@ -23,15 +23,9 @@ const isExpiredTime = (timestamp=new Date(), prevTimestamp=new Date()) => {
 
     return false;
 };
-const defaultColors = {
-    "asi": "#620bbf",
-    "dev": "#16a34a",
-    "illa": "#d90000",
-    "misc": "#16a34a"
-};
 
-export default function MessagesPane({ messages, user, pfp, onChat=(chat)=>{}, loading=false }) {
-    const [color, setColor] = useState(defaultColors[pfp] ?? defaultColors.misc);
+export default function MessagesPane({ messages, user, pfp, defaultColor="#16a34a", onChat=(chat)=>{}, loading=false }) {
+    const [color, setColor] = useState(defaultColor);
     const [offline, setOffline] = useState(false);
     const output = [];
     let lastTimestamp = null;
@@ -131,7 +125,7 @@ export default function MessagesPane({ messages, user, pfp, onChat=(chat)=>{}, l
         });
 
         // Import saved custom color
-        const localColor = getCustomState("sos_messages_color_" + user)?.color ?? defaultColors[pfp] ?? defaultColors.misc;
+        const localColor = getCustomState("sos_messages_color_" + user)?.color ?? defaultColor;
         setColor(localColor);
 
         // Locally save custom color

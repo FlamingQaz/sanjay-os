@@ -1,13 +1,11 @@
 "use client"
 
-import MessagesChatBot from "./components/chat-bot";
+import MessagesChatList from "./components/chat-list";
 
 export default function MessagesPage() {
-    // green:#16a34a
-
     return (
         <>
-            <MessagesChatBot user={"Some User"} />
+            <MessagesChatList />
         </>
     );
 }

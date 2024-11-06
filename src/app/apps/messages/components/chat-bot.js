@@ -25,7 +25,7 @@ function image(prompt) {
     return `$SanjayOS_Prompt$![${prompt}](https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?seed=0&nologo=true&private=true)`;
 }
 
-export default function MessagesChatBot({ user, pfp, system=systemChat }) {
+export default function MessagesChatBot({ user, pfp, defaultColor, system=systemChat }) {
     const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(false);
     const [mounted, setMounted] = useState(false);
@@ -77,6 +77,6 @@ export default function MessagesChatBot({ user, pfp, system=systemChat }) {
     });
 
     return (
-        <MessagesPane messages={messages} user={user} pfp={pfp} onChat={sendChat} loading={loading} />
+        <MessagesPane messages={messages} user={user} pfp={pfp} defaultColor={defaultColor} onChat={sendChat} loading={loading} />
     );
 }

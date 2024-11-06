@@ -14,8 +14,6 @@ const customComponents = {
     p: (paragraph) => {
         const { node } = paragraph;
 
-        console.log(node);
-
         if (node.children[0]?.value == "$SanjayOS_Prompt$" && node.children[1]?.tagName === "img") {
             const image = node.children[1];
             const metastring = image.properties.alt;

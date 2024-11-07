@@ -54,32 +54,43 @@ function ClockCenter({ topLabel, bottomLabel }) {
     );
 }
 
-export default function Clock({ timezone=new Intl.DateTimeFormat().resolvedOptions().timeZone, width="100%" }) {
-    const [date, setDate] = useState(new Date());
+function getDateWithTimezone(timezone) {
+    const timezoneOffsetRaw = new Intl.DateTimeFormat('en-US', {
+        timeZone: timezone,
+        timeZoneName: "longOffset"
+    }).format(new Date()).split("GMT")[1].split(":");
+
+    const timezoneOffsetHours = Number(timezoneOffsetRaw[0]) * 60;
+    const timezoneOffsetMins = Number(timezoneOffsetRaw[1]);
+    const ownOffset = new Date().getTimezoneOffset();
+
+    const totalOffset = (ownOffset + timezoneOffsetHours + timezoneOffsetMins) * 60 * 1000;
+    return new Date(Date.now() + totalOffset);
+}
+
+export function isValidTimezone(timezone) {
+    return !isNaN(getDateWithTimezone(timezone));
+}
+
+export default function Clock({ timezone, width="100%", frequency=50 }) {
+    const [date, setDate] = useState(null);
 
     useEffect(() => {
         const interval = setInterval(() => {
-            const timezoneOffsetRaw = new Intl.DateTimeFormat('en-US', {
-                timeZone: timezone,
-                timeZoneName: "longOffset"
-            }).format(new Date()).split("GMT")[1].split(":");
-
-            const timezoneOffsetHours = Number(timezoneOffsetRaw[0]) * 60;
-            const timezoneOffsetMins = Number(timezoneOffsetRaw[1]);
-            const ownOffset = new Date().getTimezoneOffset();
-
-            const totalOffset = (ownOffset + timezoneOffsetHours + timezoneOffsetMins) * 60 * 1000;
-            const newDate = new Date(Date.now() + totalOffset);
-
+            const newDate = getDateWithTimezone(timezone);
             setDate(newDate);
-        }, 50);
+        }, frequency);
+        setDate(new Date());
 
         return () => {
             clearInterval(interval);
         }
-    });
+    }, [timezone]);
+
+    if (!date) return null;
 
     return (
+        <>
             <div className="relative aspect-square bg-white p-3 rounded-full" style={{width, height: width}}>
                 <ClockHour hour={1} />
                 <ClockHour hour={2} />
@@ -98,5 +109,6 @@ export default function Clock({ timezone=new Intl.DateTimeFormat().resolvedOptio
                 <ClockHandHours date={date} />
                 <ClockCenter topLabel={date.toLocaleTimeString({}, { timeStyle: "short" })} bottomLabel={timezone.split("/")[1].replace(/_/g, " ")} />
             </div>
+        </>
     );
 }

@@ -51,19 +51,6 @@ export default function MessagesChatList() {
                 <ChatItem user={Asi.user} pfp={Asi.pfp} desc={Asi.desc} />
                 <ChatItem user={Dev.user} pfp={Dev.pfp} desc={Dev.desc} />
                 <ChatItem user={Illa.user} pfp={Illa.pfp} desc={Illa.desc} />
-                <ChatItem user={Illa.user} pfp={Illa.pfp} desc={Illa.desc} />
-                <ChatItem user={Illa.user} pfp={Illa.pfp} desc={Illa.desc} />
-                <ChatItem user={Illa.user} pfp={Illa.pfp} desc={Illa.desc} />
-                <ChatItem user={Illa.user} pfp={Illa.pfp} desc={Illa.desc} />
-                <ChatItem user={Illa.user} pfp={Illa.pfp} desc={Illa.desc} />
-                <ChatItem user={Illa.user} pfp={Illa.pfp} desc={Illa.desc} />
-                <ChatItem user={Illa.user} pfp={Illa.pfp} desc={Illa.desc} />
-                <ChatItem user={Illa.user} pfp={Illa.pfp} desc={Illa.desc} />
-                <ChatItem user={Illa.user} pfp={Illa.pfp} desc={Illa.desc} />
-                <ChatItem user={Illa.user} pfp={Illa.pfp} desc={Illa.desc} />
-                <ChatItem user={Illa.user} pfp={Illa.pfp} desc={Illa.desc} />
-                <ChatItem user={Illa.user} pfp={Illa.pfp} desc={Illa.desc} />
-                <ChatItem user={Illa.user} pfp={Illa.pfp} desc={Illa.desc} />
             </div>
         </div>
     );

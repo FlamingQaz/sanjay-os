@@ -1,9 +1,9 @@
 export const defaultApps = {
-    "camera": "/apps/camera",
-    "photos": "/apps/photos",
     "messages": "/apps/messages",
     "clock": "/apps/clock",
     "calculator": "/apps/calculator",
+    "camera": "/apps/camera",
+    "photos": "/apps/photos",
     "docs": "/apps/docs",
     "calendar": "/apps/calendar",
     "draw": "/apps/draw",

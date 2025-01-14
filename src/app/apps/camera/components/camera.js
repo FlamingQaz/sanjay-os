@@ -55,6 +55,7 @@ export default function Camera({ isRear=false }) {
                 <video ref={video}></video>
                 <img ref={image} />
             </div>
+            <div>The camera app is currently a work in progress with minimal functionality. More coming soon!</div>
         </>
     );
 }

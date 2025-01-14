@@ -58,10 +58,14 @@ export default function TopMenu({ open }) {
                 <AppAdder />
             </AppIconGroup>
             <AppIconGroup>
-            <AppSearch onSearch={onSearch} />
+                <AppSearch onSearch={onSearch} />
                 {/* Search Apps */}
                 {searchedApps.map(app => <AppIcon icon={getApps()[app][1]} name={title(app)} key={app} url={getApps()[app][0]} />)}
             </AppIconGroup>
+            <div className="text-gray-400 flex justify-center items-center flex-col w-full gap-0">
+                <div>Created by <a href="https://sanjayb.dev" className="underline">Sanjay (Cannicide)</a></div>
+                <div>App icons by <a href="https://icons8.com" className="underline">Icons8</a></div>
+            </div>
         </div>
     )
 }

@@ -1,6 +1,6 @@
 "use-client"
 
-import { togglePinApp } from "../globals";
+import { togglePinApp, unimplementedApps } from "../globals";
 
 export default function AppIcon({ icon, name, url }) {
 
@@ -11,7 +11,8 @@ export default function AppIcon({ icon, name, url }) {
     }
 
     function onClick() {
-        window.open(url, "_blank");
+        if (unimplementedApps.includes(name.toLowerCase())) alert(`The ${name} app is currently still being developed. Coming soon!`)
+        else window.open(url, "_blank");
     }
 
     return (

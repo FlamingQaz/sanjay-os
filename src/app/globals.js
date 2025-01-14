@@ -12,6 +12,16 @@ export const defaultApps = {
     "settings": "/apps/settings"
 };
 
+export const unimplementedApps = [
+    "photos",
+    "docs",
+    "calendar",
+    "draw",
+    "weather",
+    "maps",
+    "settings"
+];
+
 function getDefaultApps() {
     return Object.fromEntries(Object.entries(defaultApps).map(([name, url]) => {
         return [name, [url, "/app-icons/" + name + ".svg"]]

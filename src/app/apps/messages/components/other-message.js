@@ -56,7 +56,7 @@ export default function MessagesOther({ username, message = "", loading=false, o
                         /> : (!offline ? <Markdown components={customComponents}>{message}</Markdown> : "")}
                     {offline ?
                         <div className="flex flex-col justify-center items-center gap-2">
-                            <Image src="/no-internet.png" alt="No Internet" loading="lazy" width={64} height={64} className="invert" />
+                            <img src="/no-internet.png" alt="No Internet" loading="lazy" width={64} height={64} className="invert" />
                             <span className="text-xs">Sorry, you're not connected to the internet :(</span>
                         </div> : ""}
                 </div>

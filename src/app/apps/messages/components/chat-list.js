@@ -4,7 +4,6 @@ import * as Asi from "../users/asi/page";
 import * as Dev from "../users/dev/page";
 import * as Illa from "../users/illa/page";
 
-import Image from "next/image";
 import { useState, useEffect } from "react";
 
 import { getCustomState } from "@/app/globals";
@@ -19,7 +18,7 @@ function ChatItem({ user, pfp, desc="Placeholder description here." }) {
 
     return (
         <a className="w-full py-3 flex flex-row items-center border-t-2 last:border-b-2 border-gray-800 hover:bg-gray-800" href={`/apps/messages/users/${pfp}`} style={{"--sos-user-color": color}}>
-            <Image width={64} height={64} src={`/user-pfps/${pfp}.jpg`} className="w-12 h-12 mr-4 rounded-full" alt="Main avatar" loading="lazy" />
+            <img width={64} height={64} src={`/user-pfps/${pfp}.jpg`} className="w-12 h-12 mr-4 rounded-full" alt="Main avatar" loading="lazy" />
             <div className="w-full flex flex-col">
                 <div className="font-bold text-sm sm:text-base lg:text-lg">
                     {user}

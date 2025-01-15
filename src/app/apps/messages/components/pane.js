@@ -169,7 +169,7 @@ export default function MessagesPane({ messages, user, pfp, defaultColor="#16a34
                 </a>
                 <div className="grow"></div>
                 <div className="flex flex-col">
-                    <Image width={64} height={64} src={`/user-pfps/${pfp}.jpg`} className="w-16 h-16 p-2 rounded-full" alt="Main avatar" loading="lazy" />
+                    <img width={64} height={64} src={`/user-pfps/${pfp}.jpg`} className="w-16 h-16 p-2 rounded-full" alt="Main avatar" loading="lazy" />
                     <p className="w-full text-center text-xs">{user}</p>
                 </div>
                 <div className="grow"></div>
